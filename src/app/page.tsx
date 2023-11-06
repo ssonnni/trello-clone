@@ -55,7 +55,7 @@ export default function Home() {
 const SectionLayout = styled.section`
   margin: 0 auto;
   width: 100%;
-  padding: 50px 10px;
+  padding: 100px 10px;
   display: flex;
   gap: 30px;
   justify-content: center;
