@@ -61,6 +61,7 @@ const SectionLayout = styled.section`
   justify-content: center;
 
   font-size: 30px;
+  
   font-weight: 800;
 `;
 
