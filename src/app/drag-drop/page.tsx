@@ -1,5 +1,6 @@
 "use client";
 
+import DraggableCard from "@/lib/components/draggableCard";
 import { toDoState } from "@/lib/store/dragAtom";
 import {
   DragDropContext,
@@ -16,7 +17,6 @@ const DragDrop = () => {
     // draggableId : 드래그한 아이템
     // destination : 도착점 정보
     // source : 시작점 정보
-  
 
     //undefined면
     if (!destination) return;
@@ -38,17 +38,7 @@ const DragDrop = () => {
           {(dropEvent) => (
             <CardList ref={dropEvent.innerRef} {...dropEvent.droppableProps}>
               {toDos.map((todo, index) => (
-                <Draggable draggableId={todo} index={index} key={todo}>
-                  {(dragEvent) => (
-                    <Card
-                      ref={dragEvent.innerRef}
-                      {...dragEvent.draggableProps}
-                      {...dragEvent.dragHandleProps}
-                    >
-                      {todo}
-                    </Card>
-                  )}
-                </Draggable>
+                <DraggableCard key={todo} todo={todo} index={index} />
               ))}
               {/* 카드리스트 영역 사이즈 유지 */}
               {dropEvent.placeholder}
@@ -81,11 +71,4 @@ const CardList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 10px;
-`;
-
-const Card = styled.div`
-  background-color: ${(props) => props.theme.cardBgColor};
-  border-radius: 5px;
-  padding: 30px;
-  font-size: 20px;
 `;
