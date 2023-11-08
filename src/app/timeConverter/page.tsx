@@ -1,6 +1,6 @@
 "use client";
 
-import { hourSelector, minuteState, secondSelector } from "@/lib/store/atom";
+import { hourSelector, minuteState, secondSelector } from "@/lib/store/timeAtom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
