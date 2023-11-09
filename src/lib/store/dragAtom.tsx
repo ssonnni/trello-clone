@@ -1,7 +1,14 @@
 "use client";
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 
-export const toDoState = atom({
+interface IToDoState {
+  [key: string]: string[];
+}
+export const toDoState = atom<IToDoState>({
   key: "toDos",
-  default: ['a','b','c','d','e','f'],
+  default: {
+    todos: ["a", "b"],
+    doing: ["c", "d", "e"],
+    done: ["f"],
+  },
 });

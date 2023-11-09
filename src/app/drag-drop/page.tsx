@@ -1,13 +1,8 @@
 "use client";
 
-import DraggableCard from "@/lib/components/draggableCard";
+import Board from "@/lib/components/Board";
 import { toDoState } from "@/lib/store/dragAtom";
-import {
-  DragDropContext,
-  Draggable,
-  DropResult,
-  Droppable,
-} from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
@@ -20,31 +15,26 @@ const DragDrop = () => {
 
     //undefined면
     if (!destination) return;
-    setToDos((oldToDos) => {
-      const copyOldTodos = [...oldToDos];
-      //시작점
-      copyOldTodos.splice(source.index, 1);
-      //도착점
-      copyOldTodos.splice(destination.index, 0, draggableId);
+    // setToDos((oldToDos) => {
+    //   const copyOldTodos = [...oldToDos];
+    //   //시작점
+    //   copyOldTodos.splice(source.index, 1);
+    //   //도착점
+    //   copyOldTodos.splice(destination.index, 0, draggableId);
 
-      return copyOldTodos;
-    });
+    //   return copyOldTodos;
+    // });
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
-        <Droppable droppableId="one">
-          {(dropEvent) => (
-            <CardList ref={dropEvent.innerRef} {...dropEvent.droppableProps}>
-              {toDos.map((todo, index) => (
-                <DraggableCard key={todo} todo={todo} index={index} />
-              ))}
-              {/* 카드리스트 영역 사이즈 유지 */}
-              {dropEvent.placeholder}
-            </CardList>
-          )}
-        </Droppable>
+        {Object.keys(toDos).map((toDoKey) => (
+          <>
+            <h2>{toDoKey}</h2>
+            <Board key={toDoKey} toDos={toDos[toDoKey]} droppableId={toDoKey} />
+          </>
+        ))}
       </Wrapper>
     </DragDropContext>
   );
@@ -58,17 +48,7 @@ const Wrapper = styled.section`
   background-color: ${(props) => props.theme.bgColor};
 
   display: flex;
-  align-items: center;
-  justify-content: center;
-`;
 
-const CardList = styled.ul`
-  width: 500px;
-  min-height: 500px;
-  background-color: ${(props) => props.theme.cardListBgColor};
-  border-radius: 5px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  justify-content: center;
+  gap: 20px;
 `;
