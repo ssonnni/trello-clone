@@ -8,7 +8,7 @@ interface IDraggableCard {
 }
 
 const DraggableCard = ({ todo, index }: IDraggableCard) => {
-  console.log(todo, index);
+
 
   return (
     <Draggable draggableId={todo} index={index}>
