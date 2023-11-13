@@ -9,6 +9,7 @@ import styled from "styled-components";
 interface IBoardProps {
   toDos: string[];
   droppableId: string;
+  
   dragEvent: DraggableProvided;
 }
 const Board = ({ toDos, droppableId, dragEvent }: IBoardProps) => {
