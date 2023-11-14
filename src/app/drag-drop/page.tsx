@@ -86,7 +86,7 @@ const DragDrop = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Droppable droppableId="all">
+      <Droppable droppableId="all" direction="horizontal">
         {(dropEvent) => (
           <Wrapper ref={dropEvent.innerRef} {...dropEvent.droppableProps}>
             {Object.keys(toDos).map((toDoKey, index) => (
@@ -102,6 +102,8 @@ const DragDrop = () => {
                 )}
               </Draggable>
             ))}
+            {/* 카드리스트 영역 사이즈 유지 */}
+            {dropEvent.placeholder}
           </Wrapper>
         )}
       </Droppable>
