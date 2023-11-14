@@ -9,17 +9,17 @@ import styled from "styled-components";
 interface IBoardProps {
   toDos: string[];
   droppableId: string;
-  
   dragEvent: DraggableProvided;
+  isBoard: boolean;
 }
-const Board = ({ toDos, droppableId, dragEvent }: IBoardProps) => {
+const Board = ({ toDos, droppableId, dragEvent, isBoard }: IBoardProps) => {
   return (
     <Wrapper
       ref={dragEvent.innerRef}
       {...dragEvent.draggableProps}
       {...dragEvent.dragHandleProps}
     >
-      <Droppable droppableId={droppableId}>
+      <Droppable droppableId={droppableId} isDropDisabled={isBoard}>
         {(dropEvent) => (
           <CardList ref={dropEvent.innerRef} {...dropEvent.droppableProps}>
             <h2>{droppableId}</h2>

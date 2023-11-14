@@ -2,8 +2,10 @@
 
 import Board from "@/lib/components/Board";
 import { toDoState } from "@/lib/store/dragAtom";
+import { useState } from "react";
 import {
   DragDropContext,
+  DragStart,
   Draggable,
   DropResult,
   Droppable,
@@ -13,20 +15,57 @@ import styled from "styled-components";
 
 const DragDrop = () => {
   const [toDos, setToDos] = useRecoilState(toDoState);
-  const onDragEnd = (info: DropResult) => {
-    console.log(info);
+  const [isBoard, setIsBoard] = useState(false);
 
+  const onDragStart = (info: DragStart) => {
+    const { source } = info;
+    if (source.droppableId === "all") {
+      setIsBoard(true);
+    } else {
+      setIsBoard(false);
+    }
+  };
+
+  const onDragEnd = (info: DropResult) => {
     // draggableId : 드래그한 아이템
     // destination : 도착점 정보
     // source : 시작점 정보
     const { destination, source, draggableId } = info;
-    console.log(info);
 
     //undefined면
     if (!destination) return;
+    //Board 자체 이동
+    if (source.droppableId === "all") {
+      console.log(info);
 
-    //same Board라면
-    if (destination.droppableId === source.droppableId) {
+      setToDos((allBoards) => {
+        const copyToDOs = Object.keys(toDos).map((toDoKey, index) => {
+          console.log(toDoKey);
+          return toDoKey;
+        });
+        console.log(copyToDOs);
+
+        //시작점
+        copyToDOs.splice(source.index, 1);
+        //도착점
+        copyToDOs.splice(destination.index, 0, draggableId);
+
+        const temp: { [key: string]: string[] } = {};
+
+        const newToDos = copyToDOs.forEach((key, index) => {
+          const copyToDOskey = copyToDOs[index];
+          allBoards[copyToDOskey] = allBoards[copyToDOskey];
+          return temp;
+        });
+        console.log(newToDos);
+
+        return temp;
+      });
+    } //same Board라면
+    else if (
+      destination.droppableId === source.droppableId &&
+      source.droppableId !== "all"
+    ) {
       setToDos((allBoards) => {
         const copyOldTodos = [...allBoards[source.droppableId]];
         //시작점
@@ -35,7 +74,8 @@ const DragDrop = () => {
         copyOldTodos.splice(destination.index, 0, draggableId);
         return { ...allBoards, [source.droppableId]: copyOldTodos };
       });
-    } else {
+    } //diffrent Board라면
+    else {
       setToDos((allBoards) => {
         console.log(allBoards);
         const sourceTodos = [...allBoards[source.droppableId]];
@@ -54,7 +94,7 @@ const DragDrop = () => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <Droppable droppableId="all">
         {(dropEvent) => (
           <Wrapper ref={dropEvent.innerRef} {...dropEvent.droppableProps}>
@@ -66,6 +106,7 @@ const DragDrop = () => {
                     toDos={toDos[toDoKey]}
                     droppableId={toDoKey}
                     dragEvent={dragEvent}
+                    isBoard={isBoard}
                   />
                 )}
               </Draggable>
