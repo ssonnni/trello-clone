@@ -86,7 +86,11 @@ const DragDrop = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Droppable droppableId="all" direction="horizontal">
+      <Droppable
+        droppableId="all"
+        direction="horizontal"
+        isDropDisabled={!isBoard}
+      >
         {(dropEvent) => (
           <Wrapper ref={dropEvent.innerRef} {...dropEvent.droppableProps}>
             {Object.keys(toDos).map((toDoKey, index) => (
