@@ -36,28 +36,19 @@ const DragDrop = () => {
     if (!destination) return;
     //Board 자체 이동
     if (source.droppableId === "all") {
-      console.log(info);
-
       setToDos((allBoards) => {
-        const copyToDOs = Object.keys(toDos).map((toDoKey, index) => {
-          console.log(toDoKey);
+        const copyBoardKeys = Object.keys(toDos).map((toDoKey) => {
           return toDoKey;
         });
-        console.log(copyToDOs);
-
-        //시작점
-        copyToDOs.splice(source.index, 1);
-        //도착점
-        copyToDOs.splice(destination.index, 0, draggableId);
+        copyBoardKeys.splice(source.index, 1);
+        copyBoardKeys.splice(destination.index, 0, draggableId);
 
         const temp: { [key: string]: string[] } = {};
 
-        const newToDos = copyToDOs.forEach((key, index) => {
-          const copyToDOskey = copyToDOs[index];
-          allBoards[copyToDOskey] = allBoards[copyToDOskey];
-          return temp;
+        copyBoardKeys.forEach((_, index) => {
+          const copyKey = copyBoardKeys[index];
+          temp[copyKey] = allBoards[copyKey];
         });
-        console.log(newToDos);
 
         return temp;
       });
