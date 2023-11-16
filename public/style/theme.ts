@@ -9,9 +9,9 @@ declare module "styled-components" {
 }
 
 export const DefaultTheme = {
-  bgColor: "#339FFF",
+  bgColor: "#F8F6F4",
   cardListBgColor: "#EAEAEA",
-  cardBgColor: "#F7F7F7",
+  cardBgColor: "#F4F2DE",
 };
 // 마크업 요소가 있으면 .tsx
 // 마크업 요소가 없다면 .ts

@@ -6,12 +6,16 @@ interface IDraggableCard {
   todo: string;
   index: number;
 }
+interface ISnapshot {
+  isDragging: boolean;
+}
 
 const DraggableCard = ({ todo, index }: IDraggableCard) => {
   return (
     <Draggable draggableId={todo} index={index}>
-      {(dragEvent) => (
+      {(dragEvent, snapshot) => (
         <Card
+          isDragging={snapshot.isDragging}
           ref={dragEvent.innerRef}
           {...dragEvent.draggableProps}
           {...dragEvent.dragHandleProps}
@@ -23,11 +27,16 @@ const DraggableCard = ({ todo, index }: IDraggableCard) => {
   );
 };
 
-const Card = styled.div`
-  background-color: ${(props) => props.theme.cardBgColor};
+const Card = styled.div<ISnapshot>`
+  background-color: ${(props) =>
+    props.isDragging ? "white" : props.theme.cardBgColor};
+  box-shadow: ${(props) =>
+    props.isDragging ? "0px 3px 5px 3px rgb(7,7,7,0.2)" : ""};
   border-radius: 5px;
   padding: 30px;
   font-size: 20px;
+  color: #444;
+  transition: 0.15s;
 `;
 
 //export default DraggableCard;

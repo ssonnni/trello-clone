@@ -118,12 +118,11 @@ const DragDrop = () => {
 export default DragDrop;
 
 const Wrapper = styled.section`
+  padding: 30px;
   width: 100%;
   height: 100vh;
   background-color: ${(props) => props.theme.bgColor};
-
   display: flex;
-
   justify-content: center;
   gap: 20px;
 `;
