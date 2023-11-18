@@ -2,7 +2,7 @@
 
 import Board from "@/lib/components/Board";
 import { IToDo, toDoState } from "@/lib/store/dragAtom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DragDropContext,
   DragStart,
@@ -10,7 +10,7 @@ import {
   DropResult,
   Droppable,
 } from "react-beautiful-dnd";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 
 const DragDrop = () => {
@@ -82,6 +82,16 @@ const DragDrop = () => {
       });
     }
   };
+
+  const setTodoState = useSetRecoilState(toDoState);
+  const getTodoState = useRecoilValue(toDoState);
+  useEffect(() => {
+    setTodoState(JSON.parse(String(localStorage.getItem("toDos"))));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("toDos", JSON.stringify(getTodoState));
+  }, [getTodoState]);
 
   return (
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>

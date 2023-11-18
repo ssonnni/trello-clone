@@ -16,25 +16,26 @@ interface ISnapshot {
 }
 const Board = ({ toDos, droppableId, dragEvent, isBoard }: IBoardProps) => {
   const setTodoState = useSetRecoilState(toDoState);
+
   const addTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
-      setTodoState((prev) => {
-        return {
-          ...prev,
-          [droppableId]: [
-            {
-              id: Date.now(),
-              text: e.currentTarget.value,
-            },
-            ...prev[droppableId],
-          ],
-        };
-      });
+      if (e.currentTarget.value !== "") {
+        setTodoState((prev) => {
+          return {
+            ...prev,
+            [droppableId]: [
+              {
+                id: Date.now(),
+                text: e.currentTarget.value,
+              },
+              ...prev[droppableId],
+            ],
+          };
+        });
+      }
       e.currentTarget.value = "";
     }
   };
-
-  console.log(toDos);
 
   return (
     <Wrapper
@@ -51,15 +52,19 @@ const Board = ({ toDos, droppableId, dragEvent, isBoard }: IBoardProps) => {
             {...dropEvent.droppableProps}
           >
             <h2 className="boardName">{droppableId}</h2>
+         
             <input
               type="text"
               placeholder={`할일을 ${droppableId}에추가하세요`}
-              onKeyUp={(e) => {
-                addTodo(e);
-              }}
+              onKeyUp={addTodo}
             />
             {toDos.map((todo, index) => (
-              <DraggableCard key={todo.id} todo={todo} index={index} />
+              <DraggableCard
+                key={todo.id}
+                todo={todo}
+                index={index}
+                boardId={droppableId}
+              />
             ))}
             {/* 카드리스트 영역 사이즈 유지 */}
             {dropEvent.placeholder}

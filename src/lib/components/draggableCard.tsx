@@ -1,19 +1,32 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { IToDo } from "../store/dragAtom";
+import { IToDo, toDoState } from "../store/dragAtom";
 
 interface IDraggableCard {
   todo: IToDo;
   index: number;
+  boardId: string;
 }
 interface ISnapshot {
   isDragging: boolean;
 }
 
-const DraggableCard = ({ todo, index }: IDraggableCard) => {
-  console.log(todo);
-  
+const DraggableCard = ({ todo, index, boardId }: IDraggableCard) => {
+  const setTodoState = useSetRecoilState(toDoState);
+
+  const deleteTodo = () => {
+    setTodoState((prev) => {
+      const copyPrev = [...prev[boardId]];
+      copyPrev.splice(index, 1);
+      return {
+        ...prev,
+        [boardId]: copyPrev,
+      };
+    });
+  };
+
   return (
     <Draggable draggableId={todo.id + ""} index={index}>
       {(dragEvent, snapshot) => (
@@ -24,6 +37,15 @@ const DraggableCard = ({ todo, index }: IDraggableCard) => {
           {...dragEvent.dragHandleProps}
         >
           {todo.text}
+          {todo.text && (
+            <div
+              onClick={() => {
+                deleteTodo();
+              }}
+            >
+              X
+            </div>
+          )}
         </Card>
       )}
     </Draggable>
@@ -31,6 +53,10 @@ const DraggableCard = ({ todo, index }: IDraggableCard) => {
 };
 
 const Card = styled.div<ISnapshot>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
   background-color: ${(props) =>
     props.isDragging ? "white" : props.theme.cardBgColor};
   box-shadow: ${(props) =>
