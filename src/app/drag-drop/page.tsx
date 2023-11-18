@@ -1,7 +1,7 @@
 "use client";
 
 import Board from "@/lib/components/Board";
-import { toDoState } from "@/lib/store/dragAtom";
+import { IToDo, toDoState } from "@/lib/store/dragAtom";
 import { useState } from "react";
 import {
   DragDropContext,
@@ -43,7 +43,7 @@ const DragDrop = () => {
         copyBoardKeys.splice(source.index, 1);
         copyBoardKeys.splice(destination.index, 0, draggableId);
 
-        const temp: { [key: string]: string[] } = {};
+        const temp: { [key: string]: IToDo[] } = {};
 
         copyBoardKeys.forEach((_, index) => {
           const copyKey = copyBoardKeys[index];
@@ -60,20 +60,19 @@ const DragDrop = () => {
       setToDos((allBoards) => {
         const copyOldTodos = [...allBoards[source.droppableId]];
         //시작점
-        copyOldTodos.splice(source.index, 1);
+        const copyObj: IToDo = copyOldTodos.splice(source.index, 1)[0];
         //도착점
-        copyOldTodos.splice(destination.index, 0, draggableId);
+        copyOldTodos.splice(destination.index, 0, copyObj);
         return { ...allBoards, [source.droppableId]: copyOldTodos };
       });
     } //diffrent Board라면
     else {
       setToDos((allBoards) => {
-        console.log(allBoards);
         const sourceTodos = [...allBoards[source.droppableId]];
         const destTodos = [...allBoards[destination.droppableId]];
 
-        sourceTodos.splice(source.index, 1);
-        destTodos.splice(destination.index, 0, draggableId);
+        const copyObj: IToDo = sourceTodos.splice(source.index, 1)[0];
+        destTodos.splice(destination.index, 0, copyObj);
 
         return {
           ...allBoards,

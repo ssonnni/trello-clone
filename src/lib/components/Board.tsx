@@ -1,9 +1,11 @@
-import { DraggableId, DraggableProvided, Droppable } from "react-beautiful-dnd";
+import { DraggableProvided, Droppable } from "react-beautiful-dnd";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { IToDo, toDoState } from "../store/dragAtom";
 import DraggableCard from "./DraggableCard";
 
 interface IBoardProps {
-  toDos: string[];
+  toDos: IToDo[];
   droppableId: string;
   dragEvent: DraggableProvided;
   isBoard: boolean;
@@ -13,6 +15,27 @@ interface ISnapshot {
   isDraggingFromThisWith: boolean;
 }
 const Board = ({ toDos, droppableId, dragEvent, isBoard }: IBoardProps) => {
+  const setTodoState = useSetRecoilState(toDoState);
+  const addTodo = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      setTodoState((prev) => {
+        return {
+          ...prev,
+          [droppableId]: [
+            {
+              id: Date.now(),
+              text: e.currentTarget.value,
+            },
+            ...prev[droppableId],
+          ],
+        };
+      });
+      e.currentTarget.value = "";
+    }
+  };
+
+  console.log(toDos);
+
   return (
     <Wrapper
       ref={dragEvent.innerRef}
@@ -28,8 +51,15 @@ const Board = ({ toDos, droppableId, dragEvent, isBoard }: IBoardProps) => {
             {...dropEvent.droppableProps}
           >
             <h2 className="boardName">{droppableId}</h2>
+            <input
+              type="text"
+              placeholder={`할일을 ${droppableId}에추가하세요`}
+              onKeyUp={(e) => {
+                addTodo(e);
+              }}
+            />
             {toDos.map((todo, index) => (
-              <DraggableCard key={todo} todo={todo} index={index} />
+              <DraggableCard key={todo.id} todo={todo} index={index} />
             ))}
             {/* 카드리스트 영역 사이즈 유지 */}
             {dropEvent.placeholder}

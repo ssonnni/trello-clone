@@ -1,9 +1,10 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
+import { IToDo } from "../store/dragAtom";
 
 interface IDraggableCard {
-  todo: string;
+  todo: IToDo;
   index: number;
 }
 interface ISnapshot {
@@ -11,8 +12,10 @@ interface ISnapshot {
 }
 
 const DraggableCard = ({ todo, index }: IDraggableCard) => {
+  console.log(todo);
+  
   return (
-    <Draggable draggableId={todo} index={index}>
+    <Draggable draggableId={todo.id + ""} index={index}>
       {(dragEvent, snapshot) => (
         <Card
           isDragging={snapshot.isDragging}
@@ -20,7 +23,7 @@ const DraggableCard = ({ todo, index }: IDraggableCard) => {
           {...dragEvent.draggableProps}
           {...dragEvent.dragHandleProps}
         >
-          {todo}
+          {todo.text}
         </Card>
       )}
     </Draggable>
