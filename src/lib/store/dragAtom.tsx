@@ -11,8 +11,8 @@ interface IToDoState {
 export const toDoState = atom<IToDoState>({
   key: "toDos",
   default: {
-    Todos: [],
-    Doing: [],
-    Done: [],
+    // Todos: [],
+    // Doing: [],
+    // Done: [],
   },
 });

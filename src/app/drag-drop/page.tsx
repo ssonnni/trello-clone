@@ -86,7 +86,15 @@ const DragDrop = () => {
   const setTodoState = useSetRecoilState(toDoState);
   const getTodoState = useRecoilValue(toDoState);
   useEffect(() => {
-    setTodoState(JSON.parse(String(localStorage.getItem("toDos"))));
+    if (JSON.parse(String(localStorage.getItem("toDos")))) {
+      setTodoState(JSON.parse(String(localStorage.getItem("toDos"))));
+    } else {
+      setTodoState({
+        Todos: [],
+        Doing: [],
+        Done: [],
+      });
+    }
   }, []);
 
   useEffect(() => {
